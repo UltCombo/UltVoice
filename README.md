@@ -1,7 +1,7 @@
 UltVoice
 ========
 
-Abstraction level for the [Speech Recognition API](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html)
+Send voice commands through the [Speech Recognition API](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html)
 
 ## Usage
 
@@ -116,7 +116,7 @@ This library is currently in development, but I'll try to keep things stable in 
 
 ## Todo
 
-- Trigger string with more than one word.
+- `trigger` string with more than one word.
 
 Feel free to open an issue if you have ideas for useful features, or submit a PR directly if you feel like. `=]`
 
