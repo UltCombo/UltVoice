@@ -14,7 +14,7 @@
 	var listener = new SpeechRec(),
 		listening = false;
 	listener.continuous = true;
-	listener.onresult = function(ev) {
+	listener.addEventListener('result', function(ev) {
 		var res = ev.results[ev.results.length-1];
 
 		if (ultvoice.debug) console.log('results', res);
@@ -37,11 +37,11 @@
 				});
 			});
 		});
-	};
-	listener.onend = function(e) {
+	});
+	listener.addEventListener('end', function(e) {
 		if (ultvoice.debug) console.log('UltVoice: ended', e);
 		if (listening) listener.start();
-	};
+	});
 
 	var ultvoice = {
 		listener: listener,
