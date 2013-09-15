@@ -96,7 +96,7 @@ You can access UltVoice's SpeechRecognition object through `ultvoice.listener`. 
 
 ## AMD module
 
-In case you'd like to use UltVoice as an AMD module, simply require it. In case UltVoice was `required` (e.g. by RequireJS) it will return the object instead of exposing a global variable.
+In case you'd like to use UltVoice as an AMD module, simply require it. In case UltVoice was `require()`d (e.g. through RequireJS) it will return the object instead of exposing a global variable.
 
 ```js
 require.config({
