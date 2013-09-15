@@ -1,7 +1,7 @@
 UltVoice
 ========
 
-Send voice commands through the [Speech Recognition API](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html)
+Implement voice commands through the [Speech Recognition API](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html)
 
 ## Usage
 
@@ -88,7 +88,11 @@ Set `ultvoice.debug = true` to get debugging info (such as every recognized spee
 
 ## Native method wrappers
 
-Call `.stop()` to gracefully stop receiving user input, or `.abort()` to terminate input and cancel any ongoing speech recognition.
+Upon abnormal interruption (other than `ultvoice.stop()`/`.abort()`), UltVoice will automatically ensue a request to restart speech recognition. You should always use the `ultvoice.start()`/`.stop()`/`.abort()` methods for this to work properly.
+
+## Exposed SpeechRecognition object
+
+You can access UltVoice's SpeechRecognition object through `ultvoice.listener`. This way, you have access to the internal SpeechRecognition object and all of its API. It can be used for things that UltVoice does not abstract, e.g. setting its `lang` property.
 
 ## AMD module
 

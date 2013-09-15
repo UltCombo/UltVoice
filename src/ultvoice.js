@@ -1,51 +1,60 @@
 (function() {
+	'use strict';
 	var prefixes = 'webkit moz ms o'.split(' '),
-		speechRec = window.SpeechRecognition;
-	for (var i = 0; !speechRec && i < prefixes.length; i++) {
-		speechRec = window[prefixes[i] + 'SpeechRecognition'];
+		SpeechRec = window.SpeechRecognition;
+	for (var i = 0; !SpeechRec && i < prefixes.length; i++) {
+		SpeechRec = window[prefixes[i] + 'SpeechRecognition'];
 	}
-	if (!speechRec) {
-		console.log('browser does not support the SpeechRecognition API. Exiting.');
+	if (!SpeechRec) {
+		console.log('UltVoice: browser does not support the SpeechRecognition API. Exiting.');
 		expose(null);
 		return;
 	}
 
-	var listener,
-		ultvoice = {
-		start: function() {
-			listener = new speechRec();
-			listener.continuous = true;
-			listener.onresult = function(ev) {
-				var res = ev.results[ev.results.length-1];
+	var listener = new SpeechRec(),
+		listening = false;
+	listener.continuous = true;
+	listener.onresult = function(ev) {
+		var res = ev.results[ev.results.length-1];
 
-				if (ultvoice.debug) console.log('results', res);
+		if (ultvoice.debug) console.log('results', res);
 
-				[].forEach.call(res, function(recAlternative) {
-					var words = recAlternative.transcript.trim().split(' ');
-					words.forEach(function(word, wordIndex) {
-						ultvoice.actions.forEach(function(action) {
-							function checkTriggerWord(trigger) {
-								if (word === trigger) {
-									action.callback.apply(null, words.slice(wordIndex + 1));
-								}
-							}
-							var trigger = action.trigger;
-							if (Array.isArray(trigger)) {
-								trigger.forEach(checkTriggerWord);
-							} else {
-								checkTriggerWord(trigger);
-							}
-						});
-					});
+		[].forEach.call(res, function(recAlternative) {
+			var words = recAlternative.transcript.trim().split(' ');
+			words.forEach(function(word, wordIndex) {
+				ultvoice.actions.forEach(function(action) {
+					function checkTriggerWord(trigger) {
+						if (word === trigger) {
+							action.callback.apply(null, words.slice(wordIndex + 1));
+						}
+					}
+					var trigger = action.trigger;
+					if (Array.isArray(trigger)) {
+						trigger.forEach(checkTriggerWord);
+					} else {
+						checkTriggerWord(trigger);
+					}
 				});
+			});
+		});
+	};
+	listener.onend = function(e) {
+		if (ultvoice.debug) console.log('UltVoice: ended', e);
+		if (listening) listener.start();
+	};
 
-			};
+	var ultvoice = {
+		listener: listener,
+		start: function() {
+			listening = true;
 			listener.start();
 		},
 		stop: function() {
+			listening = false;
 			listener.stop();
 		},
 		abort: function() {
+			listening = false;
 			listener.abort();
 		},
 		actions: [],

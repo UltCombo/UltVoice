@@ -13,6 +13,4 @@ ultvoice.actions.push({
 });
 
 
-
-
 ultvoice.start();
